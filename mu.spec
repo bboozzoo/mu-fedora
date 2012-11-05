@@ -1,6 +1,6 @@
 Name:           mu
 Version:        0.9.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tool for working with e-mail messages in Maildir format
 
 License:        GPLv3
@@ -70,6 +70,7 @@ rm -rf %{buildroot}%{_datadir}/info/dir
 
 %files -n emacs-mu4e
 %defattr(-,root,root,-)
+%dir %{_emacs_sitelispdir}/mu4e
 %{_emacs_sitelispdir}/mu4e/*.elc
 %{_datadir}/info/mu4e.*.gz
 #%%{_emacs_sitestartdir}/*.elc
@@ -89,6 +90,9 @@ fi
 
 
 %changelog
+* Mon Nov  5 2012 Maciek Borzecki <maciek.borzecki@gmail.com> - 0.9.9-3
+- Fix mu4e elisp files directory ownership
+
 * Sun Oct 21 2012 Maciek Borzecki <maciek.borzecki@gmail.com> - 0.9.9-2
 - Addressed package review issues
 
