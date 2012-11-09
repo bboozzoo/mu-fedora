@@ -1,6 +1,6 @@
 Name:           mu
 Version:        0.9.9
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Tool for working with e-mail messages in Maildir format
 
 License:        GPLv3
@@ -38,6 +38,7 @@ make the use of Maildir e-mail message convenient under Emacs.
 Summary: GNU Emacs support for mu. Source files
 Requires: emacs
 Requires: mu = %{version}-%{release}
+Requires: emacs-mu4e = %{version}-%{release}
 BuildArch: noarch
 
 %description -n emacs-mu4e-el
@@ -90,6 +91,9 @@ fi
 
 
 %changelog
+* Fri Nov  9 2012 Maciek Borzecki <maciek.borzecki@gmail.com> - 0.9.9-4
+- Make emacs-mu4e a dependency for emacs-mu4e-el
+
 * Mon Nov  5 2012 Maciek Borzecki <maciek.borzecki@gmail.com> - 0.9.9-3
 - Fix mu4e elisp files directory ownership
 
