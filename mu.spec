@@ -1,6 +1,6 @@
 Name:           mu
-Version:        0.9.9
-Release:        4%{?dist}
+Version:        0.9.9.5
+Release:        1%{?dist}
 Summary:        Tool for working with e-mail messages in Maildir format
 
 License:        GPLv3
@@ -52,7 +52,7 @@ to install this package to run mu4e. Install emacs-mu4e package instead.
 if [ ! -x ./configure ] ; then
    /usr/bin/autoreconf -if
 fi
-%configure --with-gui=none
+EMACS=/usr/bin/emacs %configure --disable-gtk
 # fix rpath, upstream distribues libtool from
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -91,6 +91,9 @@ fi
 
 
 %changelog
+* Wed May 22 2013 Matt Ford <matt@dancingfrog.co.uk> - 0.9.9.5-1
+- Updated to latest version 0.9.9.5
+
 * Fri Nov  9 2012 Maciek Borzecki <maciek.borzecki@gmail.com> - 0.9.9-4
 - Make emacs-mu4e a dependency for emacs-mu4e-el
 
