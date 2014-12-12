@@ -1,16 +1,28 @@
+# git SHA-1 of 0.9.11 tag
+%global commit e434ea7680fb89c972b2c71783fea12c4c88a129
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+%define owner djcb
+
+%global guile_pkgconf %(pkg-config --list-all | grep guile | sed -e 's! .*$!!g')
+%global guile_sitedir %(pkg-config --variable=sitedir %{guile_pkgconf})
+
 Name:           mu
-Version:        0.9.9.5
+Version:        0.9.11
 Release:        1%{?dist}
 Summary:        Tool for working with e-mail messages in Maildir format
 
 License:        GPLv3
 URL:            http://www.djcbsoftware.nl/code/mu
-Source0:        http://mu0.googlecode.com/files/%{name}-%{version}.tar.gz
+Source0:        https://github.com/%{owner}/%{name}/archive/%{commit}/%{name}-%{commit}.tar.gz
 BuildRequires:  xapian-core-devel
+# unlisted dependency for xapian-core-devel, see
+# https://bugzilla.redhat.com/show_bug.cgi?id=1173099
 BuildRequires:  libuuid-devel
+
 BuildRequires:  emacs
 BuildRequires:  glib2-devel
 BuildRequires:  gmime-devel
+BuildRequires:  guile-devel
 BuildRequires:  zlib-devel
 BuildRequires:  texinfo
 BuildRequires:  autoconf automake libtool pkgconfig
@@ -45,23 +57,40 @@ BuildArch: noarch
 This package contains the elisp source files for mu4e. You do not need
 to install this package to run mu4e. Install emacs-mu4e package instead.
 
+%package -n guile-mu
+Summary: Guile bindings for mu library
+Requires: mu = %{version}-%{release}
+
+%description -n guile-mu
+The package contains guile bindings for mu.
+
+
+%package -n guile-mu-devel
+Summary: Guile bindings for mu library 
+Requires: guile-mu = %{version}-%{release}
+
+%description -n guile-mu-devel
+The package contains development files mu guile bindings.
+
 %prep
-%setup -q -D
+%setup -q -D -n %{name}-%{commit}
 
 %build
 if [ ! -x ./configure ] ; then
    /usr/bin/autoreconf -if
 fi
-EMACS=/usr/bin/emacs %configure --disable-gtk
+EMACS=/usr/bin/emacs %configure --enable-mu4e --enable-guile --disable-gtk
 # fix rpath, upstream distribues libtool from
-sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+# sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+# sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 rm -rf %{buildroot}%{_datadir}/info/dir
+rm -f %{buildroot}%{_libdir}/*.la
+rm -f %{buildroot}%{_libdir}/*.a
 
 %files
 %defattr(-,root,root,-)
@@ -74,12 +103,10 @@ rm -rf %{buildroot}%{_datadir}/info/dir
 %dir %{_emacs_sitelispdir}/mu4e
 %{_emacs_sitelispdir}/mu4e/*.elc
 %{_datadir}/info/mu4e.*.gz
-#%%{_emacs_sitestartdir}/*.elc
 
 %files -n emacs-mu4e-el
 %defattr(-,root,root,-)
 %{_emacs_sitelispdir}/mu4e/*.el
-#%%{_emacs_sitestartdir}/*.el
 
 %post -n emacs-mu4e
 /sbin/install-info %{_infodir}/mu4e.info.gz %{_infodir}/dir || :
@@ -89,8 +116,31 @@ if [ $1 = 0 ] ; then
   /sbin/install-info --delete %{_infodir}/mu4e.info.gz %{_infodir}/dir || :
 fi
 
+%files -n guile-%{name}
+%{_libdir}/libguile-mu.so.*
+%{guile_sitedir}/*
+%{_datadir}/info/mu-guile.*.gz
+%{_datadir}/mu/scripts/*
+
+%post -n guile-%{name}
+/sbin/install-info %{_infodir}/mu-guile.info.gz %{_infodir}/dir || :
+/sbin/ldconfig
+
+%preun -n guile-%{name}
+if [ $1 = 0 ] ; then
+  /sbin/install-info --delete %{_infodir}/mu-guile.info.gz %{_infodir}/dir || :
+fi
+
+%postun -n guile-mu
+/sbin/ldconfig
+
+%files -n guile-%{name}-devel
+%{_libdir}/libguile-mu.so
 
 %changelog
+* Thu Dec 11 2014 Maciek Borzecki <maciek.borzecki@gmail.com> - 0.9.11-1
+- Update to version 0.9.11
+
 * Wed May 22 2013 Matt Ford <matt@dancingfrog.co.uk> - 0.9.9.5-1
 - Updated to latest version 0.9.9.5
 
