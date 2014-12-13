@@ -19,7 +19,6 @@ BuildRequires:  xapian-core-devel
 # https://bugzilla.redhat.com/show_bug.cgi?id=1173099
 BuildRequires:  libuuid-devel
 
-BuildRequires:  emacs
 BuildRequires:  glib2-devel
 BuildRequires:  gmime-devel
 BuildRequires:  guile-devel
@@ -38,6 +37,7 @@ nice Emacs interface provided in emacs-mu4e package.
 
 %package -n emacs-mu4e
 Summary: GNU Emacs support for mu
+BuildRequires:  emacs
 Requires: emacs(bin) >= %{_emacs_version}
 Requires: mu = %{version}-%{release}
 BuildArch: noarch
@@ -45,17 +45,6 @@ BuildArch: noarch
 %description -n emacs-mu4e
 mu4e is an emacs client for mu, similar to wanderlust. It's aim is to
 make the use of Maildir e-mail message convenient under Emacs.
-
-%package -n emacs-mu4e-el
-Summary: GNU Emacs support for mu. Source files
-Requires: emacs
-Requires: mu = %{version}-%{release}
-Requires: emacs-mu4e = %{version}-%{release}
-BuildArch: noarch
-
-%description -n emacs-mu4e-el
-This package contains the elisp source files for mu4e. You do not need
-to install this package to run mu4e. Install emacs-mu4e package instead.
 
 %package -n guile-mu
 Summary: Guile bindings for mu library
@@ -99,14 +88,10 @@ rm -f %{buildroot}%{_libdir}/*.a
 %{_datadir}/man/man*/*.gz
 
 %files -n emacs-mu4e
-%defattr(-,root,root,-)
 %dir %{_emacs_sitelispdir}/mu4e
 %{_emacs_sitelispdir}/mu4e/*.elc
-%{_datadir}/info/mu4e.*.gz
-
-%files -n emacs-mu4e-el
-%defattr(-,root,root,-)
 %{_emacs_sitelispdir}/mu4e/*.el
+%{_datadir}/info/mu4e.*.gz
 
 %post -n emacs-mu4e
 /sbin/install-info %{_infodir}/mu4e.info.gz %{_infodir}/dir || :
