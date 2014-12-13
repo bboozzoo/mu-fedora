@@ -33,7 +33,8 @@ mu is a tool for dealing with e-mail messages stored in the
 Maildir-format, on Unix-like systems. mu's main purpose is to help you
 to find the messages you need, quickly; in addition, it allows you to
 view messages, extract attachments, create new maildirs, etc. mu has a
-nice Emacs interface provided in emacs-mu4e package.
+nice Emacs interface provided in emacs-mu4e package. Mu facilities can
+also be accessed from Scheme using provided bindings for GNU Guile.
 
 %package -n emacs-mu4e
 Summary: GNU Emacs support for mu
@@ -45,21 +46,6 @@ BuildArch: noarch
 %description -n emacs-mu4e
 mu4e is an emacs client for mu, similar to wanderlust. It's aim is to
 make the use of Maildir e-mail message convenient under Emacs.
-
-%package -n guile-mu
-Summary: Guile bindings for mu library
-Requires: mu = %{version}-%{release}
-
-%description -n guile-mu
-The package contains guile bindings for mu.
-
-
-%package -n guile-mu-devel
-Summary: Guile bindings for mu library 
-Requires: guile-mu = %{version}-%{release}
-
-%description -n guile-mu-devel
-The package contains development files mu guile bindings.
 
 %prep
 %setup -q -D -n %{name}-%{commit}
@@ -82,10 +68,15 @@ rm -f %{buildroot}%{_libdir}/*.la
 rm -f %{buildroot}%{_libdir}/*.a
 
 %files
-%defattr(-,root,root,-)
 %doc COPYING
 %{_bindir}/mu
-%{_datadir}/man/man*/*.gz
+%{_datadir}/man/man*/*
+%{_libdir}/libguile-mu.so*
+%{guile_sitedir}/*
+%{_datadir}/info/mu-guile.*.gz
+%dir %{_datadir}/mu
+%dir %{_datadir}/mu/scripts
+%{_datadir}/mu/scripts/*
 
 %files -n emacs-mu4e
 %dir %{_emacs_sitelispdir}/mu4e
@@ -101,26 +92,16 @@ if [ $1 = 0 ] ; then
   /sbin/install-info --delete %{_infodir}/mu4e.info.gz %{_infodir}/dir || :
 fi
 
-%files -n guile-%{name}
-%{_libdir}/libguile-mu.so.*
-%{guile_sitedir}/*
-%{_datadir}/info/mu-guile.*.gz
-%{_datadir}/mu/scripts/*
-
-%post -n guile-%{name}
+%post
 /sbin/install-info %{_infodir}/mu-guile.info.gz %{_infodir}/dir || :
 /sbin/ldconfig
 
-%preun -n guile-%{name}
+%preun
 if [ $1 = 0 ] ; then
   /sbin/install-info --delete %{_infodir}/mu-guile.info.gz %{_infodir}/dir || :
 fi
 
-%postun -n guile-mu
-/sbin/ldconfig
-
-%files -n guile-%{name}-devel
-%{_libdir}/libguile-mu.so
+%postun -p /sbin/ldconfig
 
 %changelog
 * Thu Dec 11 2014 Maciek Borzecki <maciek.borzecki@gmail.com> - 0.9.11-1
