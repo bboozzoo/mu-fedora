@@ -61,11 +61,12 @@ EMACS=/usr/bin/emacs %configure --enable-mu4e --enable-guile --disable-gtk
 make %{?_smp_mflags} V=1
 
 %install
-rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 rm -rf %{buildroot}%{_datadir}/info/dir
 rm -f %{buildroot}%{_libdir}/*.la
 rm -f %{buildroot}%{_libdir}/*.a
+# mug is not shipped
+rm -f %{buildroot}%{_datadir}/man/man1/mug.1.gz
 
 %check
 make check
