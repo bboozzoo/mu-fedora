@@ -67,6 +67,9 @@ rm -rf %{buildroot}%{_datadir}/info/dir
 rm -f %{buildroot}%{_libdir}/*.la
 rm -f %{buildroot}%{_libdir}/*.a
 
+%check
+make check
+
 %files
 %doc COPYING
 %{_bindir}/mu
