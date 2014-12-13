@@ -8,7 +8,7 @@
 
 Name:           mu
 Version:        0.9.11
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Tool for working with e-mail messages in Maildir format
 
 License:        GPLv3
@@ -107,6 +107,9 @@ fi
 %postun -p /sbin/ldconfig
 
 %changelog
+* Sat Dec 13 2014 Maciek Borzęcki <maciek.borzecki@gmail.com> - 0.9.11-2
+- Updated according to review comments.
+
 * Thu Dec 11 2014 Maciek Borzecki <maciek.borzecki@gmail.com> - 0.9.11-1
 - Update to version 0.9.11
 
