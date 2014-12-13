@@ -58,7 +58,7 @@ EMACS=/usr/bin/emacs %configure --enable-mu4e --enable-guile --disable-gtk
 # fix rpath, upstream distribues libtool from
 # sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 # sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-make %{?_smp_mflags}
+make %{?_smp_mflags} V=1
 
 %install
 rm -rf %{buildroot}
