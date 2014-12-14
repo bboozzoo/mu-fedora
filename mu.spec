@@ -1,7 +1,7 @@
 # git SHA-1 of 0.9.11 tag
 %global commit e434ea7680fb89c972b2c71783fea12c4c88a129
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-%define owner djcb
+%global owner djcb
 
 %global guile_pkgconf %(pkg-config --list-all | grep guile | sed -e 's! .*$!!g')
 %global guile_sitedir %(pkg-config --variable=sitedir %{guile_pkgconf})
