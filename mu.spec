@@ -15,13 +15,12 @@ License:        GPLv3
 URL:            http://www.djcbsoftware.nl/code/mu
 Source0:        https://github.com/%{owner}/%{name}/archive/%{commit}/%{name}-%{commit}.tar.gz
 BuildRequires:  xapian-core-devel
-# unlisted dependency for xapian-core-devel, see
+# libuuid-devel is an unlisted dependency for xapian-core-devel, see
 # https://bugzilla.redhat.com/show_bug.cgi?id=1173099
 BuildRequires:  libuuid-devel
-
-BuildRequires:  glib2-devel
-BuildRequires:  gmime-devel
-BuildRequires:  guile-devel
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gmime-2.6)
+BuildRequires:  pkgconfig(guile-2.0)
 BuildRequires:  zlib-devel
 BuildRequires:  texinfo
 BuildRequires:  autoconf automake libtool pkgconfig
