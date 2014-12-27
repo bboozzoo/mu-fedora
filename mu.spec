@@ -40,7 +40,7 @@ also be accessed from Scheme using provided bindings for GNU Guile.
 Summary: GNU Emacs support for mu
 BuildRequires:  emacs
 Requires: emacs(bin) >= %{_emacs_version}
-Requires: mu = %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
 
 %description -n emacs-mu4e
