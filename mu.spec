@@ -1,5 +1,5 @@
-# git SHA-1 of 0.9.11 tag
-%global commit e434ea7680fb89c972b2c71783fea12c4c88a129
+# git SHA-1 of 0.9.16 tag
+%global commit 1c0bfe81a776b7f6e24f0ffe4ff3433f86de116c
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global owner djcb
 
@@ -7,17 +7,14 @@
 %global guile_sitedir %(pkg-config --variable=sitedir %{guile_pkgconf})
 
 Name:           mu
-Version:        0.9.11
-Release:        2%{?dist}
+Version:        0.9.16
+Release:        1%{?dist}
 Summary:        Tool for working with e-mail messages in Maildir format
 
 License:        GPLv3
 URL:            http://www.djcbsoftware.nl/code/mu
 Source0:        https://github.com/%{owner}/%{name}/archive/%{commit}/%{name}-%{commit}.tar.gz
 BuildRequires:  xapian-core-devel
-# libuuid-devel is an unlisted dependency for xapian-core-devel, see
-# https://bugzilla.redhat.com/show_bug.cgi?id=1173099
-BuildRequires:  libuuid-devel
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gmime-2.6)
 BuildRequires:  pkgconfig(guile-2.0)
@@ -80,12 +77,15 @@ make check
 %dir %{_datadir}/mu
 %dir %{_datadir}/mu/scripts
 %{_datadir}/mu/scripts/*
+%{_datadir}/doc/%{name}
+%{_datadir}/doc/%{name}/NEWS.org
 
 %files -n emacs-mu4e
 %dir %{_emacs_sitelispdir}/mu4e
 %{_emacs_sitelispdir}/mu4e/*.elc
 %{_emacs_sitelispdir}/mu4e/*.el
 %{_datadir}/info/mu4e.*.gz
+%{_datadir}/doc/%{name}/mu4e-about.org
 
 %post -n emacs-mu4e
 /sbin/install-info %{_infodir}/mu4e.info.gz %{_infodir}/dir || :
@@ -107,6 +107,9 @@ fi
 %postun -p /sbin/ldconfig
 
 %changelog
+* Wed Apr  6 2016 Maciek Borzęcki <maciek.borzecki@gmail.com> - 0.9.16-1
+- Update to mu 0.9.16
+
 * Sat Dec 13 2014 Maciek Borzęcki <maciek.borzecki@gmail.com> - 0.9.11-2
 - Updated according to review comments.
 
